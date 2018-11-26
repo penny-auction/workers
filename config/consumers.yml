@@ -7,3 +7,11 @@ example:
   keys:
     - example-key-1
     - example-key-2
+
+lot_creator:
+  kafka: <%= ENV.fetch('KAFKA_URL', '127.0.0.1:9092') %>
+  group_id: lot_creator-group
+  topics:
+    - lot_creator-topic
+  keys:
+    - lot_creator-key

@@ -10,6 +10,8 @@ gem 'railties', '~> 5.2.1'
 gem 'ruby-kafka', '~> 0.7.4'
 gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 gem 'memoist', '~> 0.16.0'
+gem 'digest-sha3'
+gem 'faraday'
 
 group :development, :test do
   gem 'pry-byebug', '~> 3.6'
