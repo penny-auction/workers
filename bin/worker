@@ -1,7 +1,25 @@
 #!/usr/bin/env ruby
 
-# require 'pry-byebug'
-# binding.pry
 require File.join(ENV.fetch('RAILS_ROOT'), 'config', 'environment')
-binding.pry
-puts 'hei'
+
+def published_lots
+  Lot.where(state: :published).find_each do |lot|
+    yield lot
+  end
+end
+
+def get_winners
+  published_lots do |lot|
+    svc = SmartContractService.new
+    result = svc.get_winner(lot_id: lot.id)
+    if result != "0x"
+      lot.update(
+        state: :finished,
+        # final_price: result
+      )
+    end
+  end
+  sleep 5.minutes
+end
+
+get_winners

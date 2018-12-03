@@ -36,6 +36,20 @@ class SmartContractService
 
   end
 
+  def get_block(height)
+    current_block   = height || 0
+    json_rpc(:eth_getBlockByNumber, ["0x#{current_block.to_s(16)}", true]).fetch('result')
+  end
+
+  def get_winner(lot_id:)
+    data = abi_encode(
+      'getWinner(uint256)',
+      '0x' + lot_id.to_s(16)
+      )
+
+    eth_call(data)
+  end
+
   def permit_transaction(issuer)
     json_rpc(:personal_unlockAccount, [normalize_address(issuer.fetch(:address)), issuer.fetch(:secret), 5]).tap do |response|
       unless response['result']
@@ -75,6 +89,22 @@ class SmartContractService
     end
   end
 
+  def eth_call(data)
+    contract_address = configuration.fetch(:contract_address)
+    issuer = configuration.fetch(:issuer)
+
+    json_rpc(
+      :eth_call,
+      [
+        {
+          from: normalize_address(issuer.fetch(:address)),
+          to:   contract_address,
+          data: data
+        },
+       'latest'
+      ]
+    ).fetch('result')
+  end
 
   def connection
     Faraday.new(@json_rpc_endpoint)
