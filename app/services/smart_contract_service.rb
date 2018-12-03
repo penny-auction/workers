@@ -32,8 +32,15 @@ class SmartContractService
     eth_send_transaction(data)
   end
 
-  def create_bid
+  def create_bid(lot_id, depositor_uid)
+    # binding.pry
+    data = abi_encode(
+      'bid(uint256,string)',
+      '0x' + lot_id.to_i.to_s(16),
+      '0x' + depositor_uid
+    )
 
+    eth_send_transaction(data)
   end
 
   def permit_transaction(issuer)

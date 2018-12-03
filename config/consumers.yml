@@ -15,3 +15,10 @@ lot_created:
     - lot_creator-topic
   # If empty it will consume all messages from topic.
   keys:
+
+bid_created:
+  kafka: <%= ENV.fetch('KAFKA_URL', '127.0.0.1:9092') %>
+  group_id: bid_creator-group
+  topics:
+    - bid_creator-topic
+  keys:
